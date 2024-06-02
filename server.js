@@ -1,0 +1,17 @@
+const express = require('express');
+const app = express();
+const parser = require('body-parser');
+const productRoutes = require('./src/routes/productRoutes');
+const db = require('./models');
+
+const PORT = process.env.PORT || 3000;
+app.use(parser.json());
+
+app.use('/products', productRoutes);
+
+app.listen(PORT, async() =>
+    {
+        console.log("runing server in port");
+        await db.sequelize.sync();
+        console.log("synced db");
+    });
