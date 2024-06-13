@@ -1,6 +1,7 @@
 const db = require('../../models');
 const services = require('../services/services');
 
+
 const {processUserData,processMultipleUsers} = services;
 
 const createRole = async(req, res) =>
@@ -14,6 +15,10 @@ const createRole = async(req, res) =>
         res.status(500).json({error: 'no se pudo crear el rol'});
     }
 }
+
+
+
+
 
 const getUsers = async (req, res) =>
 {
@@ -69,8 +74,14 @@ const createUser = async (req, res) =>{
     const {email, password, role_id, user_info} = req.body;
     const trs = await db.sequelize.transaction();
     try {
-
+        //comprobamos si ya existe
+        const reqMail = email;
+        const existingUser = await db.User.findOne({where: {email: reqMail }});
         
+        if(existingUser)
+        {
+            return res.status(400).json({error: 'email already registred'});
+        }
        
         const user = await db.User.create({email, password, role_id}, {transaction: trs});
 
