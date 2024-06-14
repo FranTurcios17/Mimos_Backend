@@ -4,21 +4,6 @@ const services = require('../services/services');
 
 const {processUserData,processMultipleUsers} = services;
 
-const createRole = async(req, res) =>
-{
-    const {rol_name} = req.body;
-    try {
-        const role = await db.Role.create({rol_name});
-
-        res.status(201).json(role);
-    } catch (error) {
-        res.status(500).json({error: 'no se pudo crear el rol'});
-    }
-}
-
-
-
-
 
 const getUsers = async (req, res) =>
 {
@@ -169,4 +154,4 @@ const deleteUser = async(req, res) => {
     }
 }
 
-module.exports = {getUsers, getOneUser, createUser, updateUser, deleteUser, createRole};
+module.exports = {getUsers, getOneUser, createUser, updateUser, deleteUser};

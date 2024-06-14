@@ -8,6 +8,11 @@ const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';
 const config = require(__dirname + '/../config/config.json')[env];
 const db = {};
+const {DataTypes} = require('sequelize');
+
+DataTypes.DECIMAL.prototype.parse = function (value) {
+  return parseFloat(value);
+};
 
 let sequelize;
 if (config.use_env_variable) {
@@ -37,20 +42,17 @@ Object.keys(db).forEach(modelName => {
   }
 });
 
-db.Role = require('./role')(sequelize,Sequelize.DataTypes);
+
 db.User = require('./user')(sequelize,Sequelize.DataTypes);
 db.Costumer = require('./costumer')(sequelize,Sequelize.DataTypes);
 db.BCostumer = require('./bcostumer')(sequelize,Sequelize.DataTypes);
 db.Admin = require('./admin')(sequelize,Sequelize.DataTypes);
 db.Product = require('./product')(sequelize,Sequelize.DataTypes);
 db.SpecialPrice = require('./specialprice')(sequelize,Sequelize.DataTypes);
+db.Order = require('./order')(sequelize,Sequelize.DataTypes);
+db.OrderItem = require('./orderitem')(sequelize,Sequelize.DataTypes);
 
-db.Role.hasMany(db.User,{
-  foreignKey: 'role_id'
-});
-db.User.belongsTo(db.Role,{
-  foreignKey: 'role_id'
-});
+
 
 db.User.hasOne(db.Costumer,{
   foreignKey: 'id_user'
@@ -73,10 +75,10 @@ db.Admin.belongsTo(db.User,{
   foreignKey: 'id_user'
 });
 
-db.BCostumer.hasMany(db.SpecialPrice,{
+db.User.hasMany(db.SpecialPrice,{
 foreignKey: 'id_client'
 });
-db.SpecialPrice.belongsTo(db.BCostumer,{
+db.SpecialPrice.belongsTo(db.User,{
   foreignKey: 'id_client'
 });
 
@@ -86,6 +88,12 @@ db.Product.hasMany(db.SpecialPrice,{
   db.SpecialPrice.belongsTo(db.Product,{
     foreignKey: 'id_product'
   });
+
+  db.Order.belongsTo(db.User, { foreignKey: 'userId' });
+    db.Order.hasMany(db.OrderItem, { foreignKey: 'orderId' });
+
+    db.OrderItem.belongsTo(db.Order, { foreignKey: 'orderId' });
+    db.OrderItem.belongsTo(db.Product, { foreignKey: 'productId' });
 
 
 db.sequelize = sequelize;
