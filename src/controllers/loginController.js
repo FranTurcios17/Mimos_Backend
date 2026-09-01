@@ -1,6 +1,8 @@
 const db = require('../../models');
 const jwt = require('jsonwebtoken');
 
+const JWT_SECRET = process.env.JWT_SECRET || 'fallback_dev_secret';
+
 const loginUser = async (req, res) =>{
 
     const {email, password} = req.body;
@@ -20,7 +22,7 @@ const loginUser = async (req, res) =>{
             
             if(user.password === password)
             {
-                const token = jwt.sign({id: user.id, role_id: user.role_id},'grupo#4', {expiresIn: '24h'});
+                const token = jwt.sign({id: user.id, role_id: user.role_id}, JWT_SECRET, {expiresIn: '24h'});
                 res.status(201).json({token});
             }
             else

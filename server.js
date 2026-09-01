@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require('express');
 const app = express();
 const parser = require('body-parser');
@@ -9,8 +11,6 @@ const specialRoutes = require('./src/routes/specialRoutes');
 const db = require('./models');
 //const verifyKey = require('./src/middlewares/autenticacion');
 const cors = require('cors');
-
-
 
 app.use(cors());
 
