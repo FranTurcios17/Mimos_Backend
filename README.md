@@ -8,6 +8,8 @@
 
 API REST para la app móvil de **Mimos**, un flujo de compra digital con catálogo de productos, precios especiales por cliente y gestión de pedidos, para clientes particulares, clientes empresariales y administradores.
 
+[![Deploy](https://img.shields.io/badge/live-render-46E3B7?logo=render&logoColor=white)](https://mimos-backend.onrender.com)
+
 ## Tabla de contenidos
 
 - [Descripción general](#descripción-general)
